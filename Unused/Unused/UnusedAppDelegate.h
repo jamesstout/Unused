@@ -67,6 +67,7 @@
  *  The search action button
  */
 @property (assign) IBOutlet NSButton *searchButton;
+@property (assign) IBOutlet NSButton *stopButton;
 
 /**
  *  The export button
@@ -142,6 +143,7 @@
  *  @param sender The search button
  */
 - (IBAction)startSearch:(id)sender;
+- (IBAction)stopSearch:(id)sender;
 
 /**
  *  Export the results to a file

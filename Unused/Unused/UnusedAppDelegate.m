@@ -32,6 +32,10 @@
 
 @property (nonatomic, strong) NSMutableArray *results;
 @property (nonatomic, strong) Searcher *searcher;
+@property (nonatomic, strong) NSDate *startDate;
+@property (nonatomic, strong) NSDate *endDate;
+@property (nonatomic, assign) NSTimeInterval interval;
+
 
 // Handle the ui updates
 - (void)setUIEnabled:(BOOL)state;
@@ -43,6 +47,8 @@ static NSString *const kTableColumnImageIcon = @"ImageIcon";
 static NSString *const kTableColumnImageShortName = @"ImageShortName";
 
 @implementation UnusedAppDelegate
+
+@synthesize startDate, endDate, interval;
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Setup the results array
@@ -108,7 +114,17 @@ static NSString *const kTableColumnImageShortName = @"ImageShortName";
     }
 }
 
+- (IBAction)stopSearch:(id)sender{
+
+    [self.searcher stop];
+    [self setUIEnabled:YES];
+}
+
+
 - (IBAction)startSearch:(id)sender {
+
+    startDate = [NSDate date];
+
     // Check if user has selected or entered a path
 	NSString *projectPath = [self.pathTextField stringValue];
 	BOOL isPathEmpty = [projectPath isEqualToString:@""];
@@ -187,6 +203,7 @@ static NSString *const kTableColumnImageShortName = @"ImageShortName";
     
     // Button groups
     [_searchButton setEnabled:state];
+    [_stopButton setEnabled:!state];
     [_processIndicator setHidden:state];
     [_mCheckbox setEnabled:state];
     [_xibCheckbox setEnabled:state];
@@ -246,7 +263,11 @@ static NSString *const kTableColumnImageShortName = @"ImageShortName";
 }
 
 - (void)searcher:(Searcher *)searcher didFinishSearch:(NSArray *)results {
-    
+
+    endDate = [NSDate date];
+    interval = [endDate timeIntervalSinceDate:startDate];
+    NSLog(@"JIMMY time taken: %@, for %ld queries", [NSString stringWithFormat:@"%.3f", interval], (long)_results.count);
+
     // Ensure all data is displayed
     [self.resultsTableView reloadData];
     
@@ -255,7 +276,7 @@ static NSString *const kTableColumnImageShortName = @"ImageShortName";
     for (NSString *path in _results) {
         fileSize += [[[NSFileManager defaultManager] attributesOfItemAtPath:path error:nil] fileSize];
     }
-    [self.statusLabel setStringValue:[NSString stringWithFormat:NSLocalizedString(@"CompletedResultMessage", @""), (unsigned long)[_results count], [FileUtil stringFromFileSize:fileSize]]];
+    [self.statusLabel setStringValue:[NSString stringWithFormat:NSLocalizedString(@"CompletedResultMessage", @""), (unsigned long)[_results count], [FileUtil stringFromFileSize:fileSize], [NSString stringWithFormat:@"%.3f", interval]]];
     
     // Enable the ui
     [self setUIEnabled:YES];
