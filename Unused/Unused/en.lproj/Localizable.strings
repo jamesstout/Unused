@@ -2,7 +2,7 @@
 /* Search */
 "Search" = "Search";
 "Searching" = "Searching...";
-"CompletedResultMessage" = "Completed - Found %ld - Size %@";
+"CompletedResultMessage" = "Completed - Found %ld - Size %@ - time taken: %@";
 
 /* Export */
 "ExportSummaryTitle" = "Unused Files in project %@\n\n";
