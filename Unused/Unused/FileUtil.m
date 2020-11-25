@@ -48,25 +48,14 @@
 }
 
 + (NSArray *)imageFilesInDirectory:(NSString *)directoryPath {
-    
-    NSMutableArray *images = [NSMutableArray array];
-    
-    // jpg
-    NSArray *jpg = [self searchDirectory:directoryPath forFiletype:@"jpg"];
-    [images addObjectsFromArray:jpg];
 
-    // jpeg
-    NSArray *jpeg = [self searchDirectory:directoryPath forFiletype:@"jpeg"];
-    [images addObjectsFromArray:jpeg];
-    
-    // png
-    NSArray *png = [self searchDirectory:directoryPath forFiletype:@"png"];
-    [images addObjectsFromArray:png];
-    
-    // gif
-    NSArray *gif = [self searchDirectory:directoryPath forFiletype:@"gif"];
-    [images addObjectsFromArray:gif];
-    
+    NSMutableArray *images = [NSMutableArray array];
+
+    for (NSString *filetype in @[@"jpg", @"jpeg", @"png", @"gif", @"pdf"]) {
+        NSArray *array = [self searchDirectory:directoryPath forFiletype:filetype];
+        [images addObjectsFromArray:array];
+    }
+
     return images;
 }
 
