@@ -55,7 +55,7 @@ static NSString *const kTableColumnImageShortName = @"ImageShortName";
     [_statusLabel setTextColor:[NSColor lightGrayColor]];
     
     // Setup search button
-    [_searchButton setBezelStyle:NSRoundedBezelStyle];
+    [_searchButton setBezelStyle:NSBezelStyleRounded];
     [_searchButton setKeyEquivalent:@"\r"];
 
     // Setup the searcher
@@ -100,10 +100,10 @@ static NSString *const kTableColumnImageShortName = @"ImageShortName";
         
         // Check write result
         if (writeError == nil) {
-            [self showAlertWithStyle:NSInformationalAlertStyle title:NSLocalizedString(@"ExportCompleteTitle", @"") subtitle:NSLocalizedString(@"ExportCompleteSubtitle", @"")];
+            [self showAlertWithStyle:NSAlertStyleInformational title:NSLocalizedString(@"ExportCompleteTitle", @"") subtitle:NSLocalizedString(@"ExportCompleteSubtitle", @"")];
         } else {
             NSLog(@"Unused write error:: %@", writeError);
-            [self showAlertWithStyle:NSCriticalAlertStyle title:NSLocalizedString(@"ExportErrorTitle", @"") subtitle:NSLocalizedString(@"ExportErrorSubtitle", @"")];
+            [self showAlertWithStyle:NSAlertStyleCritical title:NSLocalizedString(@"ExportErrorTitle", @"") subtitle:NSLocalizedString(@"ExportErrorSubtitle", @"")];
         }
     }
 }
@@ -113,7 +113,7 @@ static NSString *const kTableColumnImageShortName = @"ImageShortName";
 	NSString *projectPath = [self.pathTextField stringValue];
 	BOOL isPathEmpty = [projectPath isEqualToString:@""];
     if (isPathEmpty) {
-        [self showAlertWithStyle:NSWarningAlertStyle title:NSLocalizedString(@"MissingPathErrorTitle", @"") subtitle:NSLocalizedString(@"ProjectFolderPathErrorMessage", @"")];
+        [self showAlertWithStyle:NSAlertStyleWarning title:NSLocalizedString(@"MissingPathErrorTitle", @"") subtitle:NSLocalizedString(@"ProjectFolderPathErrorMessage", @"")];
 
         return;
     }
@@ -121,7 +121,7 @@ static NSString *const kTableColumnImageShortName = @"ImageShortName";
     // Check the path exists
 	BOOL pathExists = [[NSFileManager defaultManager] fileExistsAtPath:projectPath];
     if (!pathExists) {
-        [self showAlertWithStyle:NSWarningAlertStyle title:NSLocalizedString(@"InvalidPathErrorTitle", @"") subtitle:NSLocalizedString(@"ProjectFolderPathErrorMessage", @"")];
+        [self showAlertWithStyle:NSAlertStyleWarning title:NSLocalizedString(@"InvalidPathErrorTitle", @"") subtitle:NSLocalizedString(@"ProjectFolderPathErrorMessage", @"")];
         
         return;
     }
@@ -226,7 +226,7 @@ static NSString *const kTableColumnImageShortName = @"ImageShortName";
 - (void)tableViewDoubleClicked {
     // Open finder
     NSString *path = [self.results objectAtIndex:[self.resultsTableView clickedRow]];
-    [[NSWorkspace sharedWorkspace] selectFile:path inFileViewerRootedAtPath:nil];
+    [[NSWorkspace sharedWorkspace] selectFile:path inFileViewerRootedAtPath:@""];
 }
 
 #pragma mark - <SearcherDelegate>
