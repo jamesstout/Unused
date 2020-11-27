@@ -160,17 +160,12 @@ static unsigned int countCores()
                     NSArray *settingsItems = [self searchSettings];
                     BOOL isSearchCancelled = NO;
 
-                    NSString *backedUpBundlesString = [[settingsItems valueForKey:@"description"] componentsJoinedByString:@","];
+                    NSString *filesToSearchString = [[settingsItems valueForKey:@"description"] componentsJoinedByString:@","];
 
-
-
-//                    for (NSString *extension in settingsItems) {
-
-                        // Run the check
-                        if (!isSearchCancelled && [self occurancesOfImageNamed:imageName atDirectory:searchPath inFileExtensionType:backedUpBundlesString]) {
-                            isSearchCancelled = YES;
-                        }
-//                    }
+                    // Run the check
+                    if (!isSearchCancelled && [self occurancesOfImageNamed:imageName atDirectory:searchPath inFileExtensionType:filesToSearchString]) {
+                        isSearchCancelled = YES;
+                    }
 
                     // Is it not found - update results
                     if (!isSearchCancelled)
@@ -286,7 +281,6 @@ static unsigned int countCores()
         [task setLaunchPath: @"/bin/sh"];
 
         // Setup the call ack --type-set objc:ext:xib,storyboard,cpp,html,mm,plist,css,swift,m --objc --files-with-matches
-//        NSString *cmd = [NSString stringWithFormat:@"for filename in \"$(find %@ -name '*.%@')\"; do cat \"$filename\" 2>/dev/null | grep -o \"%@\" ; done", directoryPath, extension, [imageName stringByDeletingPathExtension]];
         NSString *cmd = [NSString stringWithFormat:@"/usr/local/bin/ack --type-set objc:ext:%@ --objc --files-with-matches \"%@\" \"%@\"", extension, [imageName stringByDeletingPathExtension], directoryPath];
         NSLog(@"%@", cmd);
         NSArray *argvals = [NSArray arrayWithObjects: @"-c", cmd, nil];
